@@ -1,0 +1,176 @@
+swagger: "2.0"
+info:
+  title: The Book Store Demo
+  description: |
+    这是一个例子， 展示了如何使用 swg包来生成swagger文档
+    书的分类
+    | type | 描述 |
+    | ---- | ---- |
+    | scientific | 科学 |
+    | sociology | 社会 |
+    | physics | 物理 |
+  version: v1
+basePath: /store
+schemes:
+- http
+- https
+parameters:
+  Token:
+    name: Token
+    in: header
+    description: 身份认证Token
+    required: true
+    type: string
+    maxLength: 64
+  bookUUID:
+    name: bookUUID
+    in: path
+    description: 书的id
+    required: true
+    type: string
+    maxLength: 8
+  userUUID:
+    name: userUUID
+    in: header
+    description: 用户uuid
+    required: true
+    type: string
+    maxLength: 8
+paths:
+  /book/{bookUUID}:
+    get:
+      tags:
+      - book
+      summary: 获取一本书的信息
+      consumes:
+      - application/json
+      - application/xml
+      parameters:
+      - $ref: '#/parameters/userUUID'
+      - $ref: '#/parameters/Token'
+      - $ref: '#/parameters/bookUUID'
+      responses:
+        "200":
+          description: 正确返回
+          schema:
+            $ref: '#/definitions/Book'
+        default:
+          description: 错误返回
+          schema:
+            $ref: '#/definitions/APIError'
+  /books:
+    get:
+      tags:
+      - book
+      summary: 列出所有的书
+      consumes:
+      - application/json
+      - application/xml
+      parameters:
+      - $ref: '#/parameters/userUUID'
+      - $ref: '#/parameters/Token'
+      responses:
+        "200":
+          description: 正确返回
+          schema:
+            $ref: '#/definitions/Books'
+        default:
+          description: 错误返回
+          schema:
+            $ref: '#/definitions/APIError'
+    post:
+      tags:
+      - book
+      summary: 上传书的信息
+      consumes:
+      - application/json
+      - application/xml
+      parameters:
+      - $ref: '#/parameters/userUUID'
+      - $ref: '#/parameters/Token'
+      responses:
+        "200":
+          description: 正确结果
+          schema:
+            $ref: '#/definitions/Books'
+        default:
+          description: 错误返回
+          schema:
+            $ref: '#/definitions/APIError'
+definitions:
+  APIError:
+    properties:
+      code:
+        description: 错误编码
+        type: integer
+        format: int32
+      message:
+        description: 错误信息
+        type: string
+  Book:
+    properties:
+      already_read:
+        description: 已读 (为空则不输出)
+        type: boolean
+      authors:
+        description: 作者列表
+        type: array
+        items:
+          type: string
+      id:
+        description: 书的uuid
+        type: string
+        maxLength: 8
+      images:
+        description: 图片urls
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+      pages:
+        description: 页数
+        type: integer
+        format: int32
+      price:
+        description: 价格
+        type: number
+        format: float
+        minimum: 1
+        maximum: 9999
+      summary:
+        description: 书的简介
+        type: string
+        maxLength: 255
+      title:
+        description: 书的题目
+        type: string
+      type:
+        description: 书的类型
+        type: string
+        enum:
+        - scientific
+        - sociology
+        - physics
+  Books:
+    properties:
+      books:
+        type: array
+        items:
+          $ref: '#/definitions/Book'
+      total:
+        description: 总数
+        type: integer
+        format: int32
+  Image:
+    properties:
+      create_time:
+        description: 创建时间
+        type: integer
+        format: int64
+      image_uuid:
+        description: 图片uuid
+        type: string
+      size:
+        description: 图片大小
+        type: integer
+        format: int32
+        maximum: 10240
