@@ -4,3 +4,6 @@
 
 本人很懒，文档回头补上
 
+可以先看这个例子：
+https://github.com/api-doc-tools/swg/tree/master/examples/apis
+
