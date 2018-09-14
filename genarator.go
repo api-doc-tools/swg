@@ -3,6 +3,7 @@ package swg
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/api-doc-tools/swg/swagger"
@@ -17,6 +18,7 @@ type DocGenarator struct {
 	Conf             *Config
 	Swagger          *swagger.Swagger
 	globalParameters map[string]Parameter
+	errs             []error
 }
 
 // NewDocGenarator 新建一个生成器
@@ -34,7 +36,7 @@ func (e *DocGenarator) GET(relativePath string, doc APIDoc) {
 	// handle
 	err := e.handle(GET, relativePath, doc)
 	if err != nil {
-		panic(err)
+		e.appendErr(err)
 	}
 }
 
@@ -43,7 +45,7 @@ func (e *DocGenarator) POST(relativePath string, doc APIDoc) {
 	// handle
 	err := e.handle(POST, relativePath, doc)
 	if err != nil {
-		panic(err)
+		e.appendErr(err)
 	}
 }
 
@@ -51,7 +53,7 @@ func (e *DocGenarator) POST(relativePath string, doc APIDoc) {
 func (e *DocGenarator) PUT(relativePath string, doc APIDoc) {
 	err := e.handle(PUT, relativePath, doc)
 	if err != nil {
-		panic(err)
+		e.appendErr(err)
 	}
 }
 
@@ -59,7 +61,7 @@ func (e *DocGenarator) PUT(relativePath string, doc APIDoc) {
 func (e *DocGenarator) PATCH(relativePath string, doc APIDoc) {
 	err := e.handle(PATCH, relativePath, doc)
 	if err != nil {
-		panic(err)
+		e.appendErr(err)
 	}
 }
 
@@ -67,7 +69,7 @@ func (e *DocGenarator) PATCH(relativePath string, doc APIDoc) {
 func (e *DocGenarator) DELETE(relativePath string, doc APIDoc) {
 	err := e.handle(DELETE, relativePath, doc)
 	if err != nil {
-		panic(err)
+		e.appendErr(err)
 	}
 }
 
@@ -198,6 +200,27 @@ func (e *DocGenarator) setSwaggerOperation(relativePath string, method string, o
 	case DELETE:
 		item.Delete = operation
 	}
+}
+
+func (e *DocGenarator) appendErr(err error) {
+	if e.errs == nil {
+		e.errs = []error{}
+	}
+	e.errs = append(e.errs, err)
+}
+
+// 打印错误
+func (e *DocGenarator) PrintErrs() {
+	len := len(e.errs)
+	if len == 0 {
+		fmt.Println("Ok")
+		return
+	}
+	errDesc := fmt.Sprintf("发现%d个问题：\n", len)
+	for i, err := range e.errs {
+		errDesc += fmt.Sprintf("  [%d] %s\n", i+1, err.Error())
+	}
+	fmt.Println(errDesc)
 }
 
 type engineError struct {

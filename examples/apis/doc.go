@@ -151,6 +151,8 @@ func SaveSwaggerDoc() error {
 	genarator.GET("/book/:bookUUID", GetBook)
 	genarator.POST("/books", AddBook)
 
+	genarator.PrintErrs() // 打印错误信息
+
 	doc, err := genarator.GetSwaggerYAMLDocument() // 拿swagger ymal格式文档（同一份代码，生成的swagger文档不会乱序的）
 	if err != nil {
 		return err

@@ -1,6 +1,12 @@
 # api 文档工具
 
-通过go代码来生成swagger文档, 如果你手误写错文档， panic会告诉你哪里出问题了
+通过go代码来生成swagger文档
+
+假如文档生成有问题， 可以通过 DocGenarator.PrintlnErrs() 打印收集到的错误，错误提示的举例：
+```
+发现1个问题：
+  [1] GET /book/{bookUUID}/{uuid} miss parameters [uuid] in APIDoc
+```
 
 本人很懒，文档回头补正确
 
