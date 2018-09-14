@@ -7,12 +7,12 @@ package swg
 //   Version  -- 版本 "v1.0.0"
 //   Title    -- API文档标题
 //   Description -- 文档描述
-//   DomainName -- 服务器域名
+//   Host -- 服务器域名
 type Config struct {
 	Schemes     []Scheme
 	BasePath    string
 	Version     string
 	Title       string
 	Description string
-	DomainName  string
+	Host        string
 }

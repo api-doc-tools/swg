@@ -10,6 +10,7 @@ info:
     | sociology | 社会 |
     | physics | 物理 |
   version: v1
+host: api-doc-tools.com
 basePath: /store
 schemes:
 - http

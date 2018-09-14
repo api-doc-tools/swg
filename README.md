@@ -239,7 +239,7 @@ conf := &swg.Config{
 	// 必填: APIs文档的描述信息
     Description:        "Demo APIS Description",
     // 必填: 域名或ip
-    DomainName:         "xxx.com",
+    Host:         "xxx.com",
 }
 ```
 

@@ -10,8 +10,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const DefalutAPIDocumentUrl = "/docs/swagger.json"
-const DefalutYAMLAPIDocumentUrl = "/docs/swagger.yaml"
+const (
+	OK = "ok"
+)
 
 // DocGenarator 文档生成器
 type DocGenarator struct {
@@ -100,6 +101,9 @@ func (e *DocGenarator) initSwaggerConf() {
 		Description: e.Conf.Description,
 		Version:     e.Conf.Version,
 	}
+
+	// set Host
+	e.Swagger.Host = e.Conf.Host
 
 	// set swagger basePath
 	e.Swagger.BasePath = e.Conf.BasePath
@@ -211,16 +215,23 @@ func (e *DocGenarator) appendErr(err error) {
 
 // 打印错误
 func (e *DocGenarator) PrintErrs() {
+	errsDesc := e.GetErrsDesc()
+	if errsDesc == "" {
+		errsDesc = OK
+	}
+	fmt.Println(errsDesc)
+}
+
+func (e *DocGenarator) GetErrsDesc() string {
 	len := len(e.errs)
 	if len == 0 {
-		fmt.Println("Ok")
-		return
+		return ""
 	}
-	errDesc := fmt.Sprintf("发现%d个问题：\n", len)
+	errsDesc := fmt.Sprintf("发现%d个问题：\n", len)
 	for i, err := range e.errs {
-		errDesc += fmt.Sprintf("  [%d] %s\n", i+1, err.Error())
+		errsDesc += fmt.Sprintf("  [%d] %s\n", i+1, err.Error())
 	}
-	fmt.Println(errDesc)
+	return errsDesc
 }
 
 type engineError struct {

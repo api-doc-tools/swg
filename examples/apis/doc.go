@@ -141,7 +141,7 @@ func SaveSwaggerDoc() error {
 		Version:     "v1",
 		Title:       "The Book Store Demo",
 		Description: "这是一个例子， 展示了如何使用 swg包来生成swagger文档\n" + BookTypeDesc(),
-		DomainName:  "api-doc-tools.com",
+		Host:        "api-doc-tools.com",
 	}
 	genarator := swg.NewDocGenarator(conf) // 新建一个生成器
 
