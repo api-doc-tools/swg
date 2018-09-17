@@ -156,6 +156,7 @@ func getDefinitionsFromStructDocMap(docMap map[string]*StructDoc) map[string]*sw
 			continue
 		}
 		properties := map[string]*swagger.Propertie{}
+		requiredList := []string{}
 		for _, field := range doc.StructFields {
 			propertie := &swagger.Propertie{}
 			if field.IsStruct {
@@ -187,8 +188,14 @@ func getDefinitionsFromStructDocMap(docMap map[string]*StructDoc) map[string]*sw
 			} else {
 				properties[field.Name] = propertie
 			}
+			if field.Required {
+				requiredList = append(requiredList, field.Name)
+			}
 		}
 		definitions[doc.StructName].Properties = properties
+		if len(requiredList) > 0 {
+			definitions[doc.StructName].Required = requiredList
+		}
 	}
 	return definitions
 }

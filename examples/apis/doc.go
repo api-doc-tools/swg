@@ -8,9 +8,10 @@ import (
 )
 
 // 目前以支持的标签有:  描述desc、最小值min、最大值max、最小长度minlen、最大长度maxlen、默认值default
-// 计划准备添加特性： 是否必填req、正则Pattern
+// 新加的特性： 是否必填req、
+// 计划准备添加特性正则Pattern
 type APIError struct {
-	Code    int    `json:"code" xml:"code" desc:"错误编码"`
+	Code    int    `json:"code" xml:"code" req:"true" desc:"错误编码"`
 	Message string `json:"message" xml:"message" desc:"错误信息"`
 }
 
@@ -153,11 +154,16 @@ func SaveSwaggerDoc() error {
 
 	genarator.PrintErrs() // 打印错误信息
 
-	doc, err := genarator.GetSwaggerYAMLDocument() // 拿swagger ymal格式文档（同一份代码，生成的swagger文档不会乱序的）
+	doc, err := genarator.GetSwaggerYAMLDocument() // swagger ymal格式文档
 	if err != nil {
 		return err
 	}
 	err = ioutil.WriteFile("swagger.yaml", []byte(doc), 0644)
+	if err != nil {
+		return err
+	}
+	doc = genarator.GetSwaggerMarkdown() // 获取markdown格式文档
+	err = ioutil.WriteFile("swagger.md", []byte(doc), 0644)
 	if err != nil {
 		return err
 	}

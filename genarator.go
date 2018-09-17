@@ -92,6 +92,10 @@ func (e DocGenarator) GetSwaggerYAMLDocument() (string, error) {
 	return string(data), nil
 }
 
+func (e DocGenarator) GetSwaggerMarkdown() string {
+	return e.Swagger.ToMarkdown()
+}
+
 func (e *DocGenarator) initSwaggerConf() {
 	// set swagger Version
 	e.Swagger.SwaggerVersion = "2.0"

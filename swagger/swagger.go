@@ -106,7 +106,7 @@ type Schema struct {
 	Title       string                `json:"title,omitempty" yaml:"title,omitempty"`
 	Format      string                `json:"format,omitempty" yaml:"format,omitempty"`
 	Description string                `json:"description,omitempty" yaml:"description,omitempty"`
-	Required    bool                  `json:"required,omitempty" yaml:"required,omitempty"`
+	Required    []string              `json:"required,omitempty" yaml:"required,omitempty"`
 	Type        string                `json:"type,omitempty" yaml:"type,omitempty"`
 	Items       *Schema               `json:"items,omitempty" yaml:"items,omitempty"`
 	Properties  map[string]*Propertie `json:"properties,omitempty" yaml:"properties,omitempty"`
