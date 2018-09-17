@@ -3,6 +3,7 @@ info:
   title: The Book Store Demo
   description: |
     这是一个例子， 展示了如何使用 swg包来生成swagger文档
+
     书的分类
     | type | 描述 |
     | ---- | ---- |
@@ -100,6 +101,8 @@ paths:
             $ref: '#/definitions/APIError'
 definitions:
   APIError:
+    required:
+    - code
     properties:
       code:
         description: 错误编码

@@ -172,7 +172,6 @@ func getDefinitionsFromStructDocMap(docMap map[string]*StructDoc) map[string]*sw
 					Enum:        field.Enum,
 					Minimum:     field.Min,
 					Maximum:     field.Max,
-					Required:    field.Required,
 					MinLength:   field.MinLen,
 					MaxLength:   field.MaxLen,
 					Default:     field.Default,

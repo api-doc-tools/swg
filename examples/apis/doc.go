@@ -72,7 +72,7 @@ var GlobalParameters = map[string]swg.Parameter{
 }
 
 func BookTypeDesc() string {
-	desc := "书的分类\n"
+	desc := "\n书的分类\n"
 	desc += "| type | 描述 |\n"
 	desc += "| ---- | ---- |\n"
 	for _, bookType := range BookTypeList {

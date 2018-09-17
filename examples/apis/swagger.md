@@ -5,6 +5,7 @@ Schemes: http,https
 Host: api-doc-tools.com
 BasePath: /store
 这是一个例子， 展示了如何使用 swg包来生成swagger文档
+
 书的分类
 | type | 描述 |
 | ---- | ---- |
@@ -16,7 +17,7 @@ BasePath: /store
 ## APIError
 | 参数名 | 必填 | 类型 | 取值范围 | 默认值 | 取值例子 | 说明 |
 | ----- | ---- | ---- | ----- | ------- | ----- | ------ |
-| code | 否 | int32 |  |  |  | 错误编码 |
+| code | 是 | int32 |  |  |  | 错误编码 |
 | message | 否 | string |  |  |  | 错误信息 |
 ## Book
 | 参数名 | 必填 | 类型 | 取值范围 | 默认值 | 取值例子 | 说明 |
