@@ -5,8 +5,8 @@ Schemes: http,https
 Host: api-doc-tools.com
 BasePath: /store
 这是一个例子， 展示了如何使用 swg包来生成swagger文档
-
 书的分类
+
 | type | 描述 |
 | ---- | ---- |
 | scientific | 科学 |
