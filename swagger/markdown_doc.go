@@ -4,6 +4,7 @@ package swagger
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 )
@@ -40,8 +41,8 @@ func (model ModelDoc) ToModelTable() string {
 
 func (swg Swagger) ToMarkdown() string {
 	doc := swg.getInfoDoc()
-	doc += swg.getModelsDoc()
 	doc += swg.getApisDoc()
+	doc += swg.getModelsDoc()
 	return doc
 }
 
@@ -229,7 +230,15 @@ func toRefDoc(ref string) string {
 		return ref
 	}
 	str := strings.Replace(ref, "#/definitions/", "", -1)
-	return fmt.Sprintf("[%s](#%s)", str, str)
+	return toGFMAnchor(str)
+}
+
+// Github Flavored Markdownn(GFM)
+func toGFMAnchor(str string) string {
+	lowerStr := strings.ToLower(str)
+	spaceRegexp := regexp.MustCompile(`\s+`)
+	anchor := spaceRegexp.ReplaceAllString(lowerStr, "-")
+	return fmt.Sprintf("[%s](#%s)", str, anchor)
 }
 
 func (pro *Propertie) ToFieldDoc(name string, required bool) FieldDoc {
