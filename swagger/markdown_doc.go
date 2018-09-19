@@ -30,7 +30,8 @@ type ModelDoc struct {
 }
 
 func (model ModelDoc) ToModelTable() string {
-	doc := "## " + model.Name + "\n"
+	doc := "\n"
+	doc += "## " + model.Name + "\n\n"
 	doc += "| 参数名 | 必填 | 类型 | 取值范围 | 默认值 | 取值例子 | 说明 |\n"
 	doc += "| ----- | ---- | ---- | ----- | ------- | ----- | ------ |\n"
 	for _, fieldDoc := range model.FieldDocs {
@@ -46,8 +47,45 @@ func (swg Swagger) ToMarkdown() string {
 	return doc
 }
 
+func (swg Swagger) getApiSummary() string {
+	doc := "\n"
+	doc += "# API 目录\n\n"
+	paths := []string{}
+	for path := range swg.Paths {
+		paths = append(paths, path)
+	}
+	sort.Sort(sort.StringSlice(paths))
+	i := 0
+	for _, path := range paths {
+		item := swg.Paths[path]
+		if item.Get != nil {
+			i++
+			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Get.Summary))
+		}
+		if item.Post != nil {
+			i++
+			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Post.Summary))
+		}
+		if item.Delete != nil {
+			i++
+			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Delete.Summary))
+		}
+		if item.Patch != nil {
+			i++
+			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Patch.Summary))
+		}
+		if item.Put != nil {
+			i++
+			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Put.Summary))
+		}
+	}
+	doc += "\n"
+	return doc
+}
+
 func (swg Swagger) getApisDoc() string {
-	doc := "# API 列表\n\n"
+	doc := "\n"
+	doc += "# API 列表\n\n"
 	paths := []string{}
 	for path := range swg.Paths {
 		paths = append(paths, path)
@@ -81,18 +119,22 @@ func (swg Swagger) itemToDoc(path string, item *Item) string {
 }
 
 func (swg Swagger) operationToDoc(method, path string, op *Operation) string {
-	doc := fmt.Sprintf("## %s\n\n", op.Summary)
+	doc := "\n"
+	doc += fmt.Sprintf("## %s\n\n", op.Summary)
 	if op.Description != "" {
 		doc += op.Description + "\n"
 	}
-	doc += fmt.Sprintf("### URL\n")
+	doc += "\n"
+	doc += fmt.Sprintf("### URL\n\n")
 	doc += fmt.Sprintf("%s %s\n", method, path)
 	if len(op.Produces) > 0 {
-		doc += fmt.Sprintf("### 请求方式\n")
+		doc += "\n"
+		doc += fmt.Sprintf("### 请求方式\n\n")
 		doc += fmt.Sprintf("%s\n", stringstoString(op.Produces))
 	}
 	if len(op.Consumes) > 0 {
-		doc += fmt.Sprintf("### 响应方式\n")
+		doc := "\n"
+		doc += fmt.Sprintf("### 响应方式\n\n")
 		doc += fmt.Sprintf(" %s\n", stringstoString(op.Consumes))
 	}
 	doc += swg.parametersToDoc(op.Parameters)
@@ -101,7 +143,8 @@ func (swg Swagger) operationToDoc(method, path string, op *Operation) string {
 }
 
 func (swg Swagger) responsesToDoc(responses map[string]*Response) string {
-	doc := "### 响应参数列表\n"
+	doc := "\n"
+	doc += "### Http状态码及响应结果信息\n"
 	keys := []string{}
 	for key := range responses {
 		keys = append(keys, key)
@@ -109,20 +152,25 @@ func (swg Swagger) responsesToDoc(responses map[string]*Response) string {
 	sort.Sort(sort.StringSlice(keys))
 	for _, key := range keys {
 		resp := responses[key]
-		doc += fmt.Sprintf("\n * %s:", key)
-		if resp.Schema != nil {
-			doc += fmt.Sprintf(" %s\n", toRefDoc(resp.Schema.Ref))
+		if key != "default" {
+			doc += fmt.Sprintf("\n - %s:", key)
 		} else {
-			doc += fmt.Sprintf(" 无\n")
+			doc += fmt.Sprintf("\n - %s:", "其他状态码")
+		}
+
+		if resp.Schema != nil {
+			doc += fmt.Sprintf(" %s\n\n", toRefDoc(resp.Schema.Ref))
+		} else {
+			doc += fmt.Sprintf(" 无\n\n")
 		}
 		doc += fmt.Sprintf("%s\n", resp.Description)
 	}
-	doc += "\n"
 	return doc
 }
 
 func (swg Swagger) parametersToDoc(parameters []*Parameter) string {
-	doc := "### 参数列表\n"
+	doc := "\n"
+	doc += "### 参数列表\n\n"
 	doc += "| 参数名 |  IN   | 必填 | 类型 | 取值范围 | 默认值 | 取值例子 | 说明 |\n"
 	doc += "| ----- | ----- |---- | ---- | ----- | ------- | ----- | ------ |\n"
 	var body *Parameter = nil
@@ -137,10 +185,10 @@ func (swg Swagger) parametersToDoc(parameters []*Parameter) string {
 		}
 	}
 	if body != nil {
-		doc += "#### body说明\n"
+		doc += "\n"
+		doc += "#### body说明\n\n"
 		doc += body.Description
 	}
-	doc += "\n"
 	return doc
 }
 
@@ -155,11 +203,16 @@ func (swg Swagger) parameterRefToDoc(ref string) string {
 }
 
 func (swg Swagger) getInfoDoc() string {
-	doc := "# " + swg.Info.Title + "\n\n"
-	doc += fmt.Sprintf("API版本: %s\n", swg.Info.Version)
-	doc += fmt.Sprintf("Schemes: %s\n", stringstoString(swg.Schemes))
-	doc += fmt.Sprintf("Host: %s\n", swg.Host)
-	doc += fmt.Sprintf("BasePath: %s\n", swg.BasePath)
+	doc := "\n"
+	doc += "# " + swg.Info.Title + "\n\n"
+	doc += swg.getApiSummary()
+	doc += "# 服务基本信息\n\n"
+	doc += fmt.Sprintf("| 关键词    |  值  |\n")
+	doc += fmt.Sprintf("| -------- | ---- |\n")
+	doc += fmt.Sprintf("| API版本   | %s |\n", swg.Info.Version)
+	doc += fmt.Sprintf("| Schemes  | %s |\n", stringstoString(swg.Schemes))
+	doc += fmt.Sprintf("| Host     | %s |\n", swg.Host)
+	doc += fmt.Sprintf("| BasePath | %s |\n", swg.BasePath)
 	doc += swg.Info.Description + "\n"
 	return doc
 }
@@ -178,7 +231,8 @@ func (swg Swagger) getModelsDoc() string {
 			FieldDocs: swg.ToFieldDocs(modelName),
 		})
 	}
-	doc := "# Model 列表\n"
+	doc := "\n"
+	doc += "# Model 列表\n\n"
 	for _, modelDoc := range modelDocs {
 		doc += modelDoc.ToModelTable()
 	}
