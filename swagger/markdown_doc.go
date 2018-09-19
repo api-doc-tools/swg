@@ -137,7 +137,7 @@ func (swg Swagger) parametersToDoc(parameters []*Parameter) string {
 		}
 	}
 	if body != nil {
-		doc += "#### body说明"
+		doc += "#### body说明\n"
 		doc += body.Description
 	}
 	doc += "\n"
@@ -242,7 +242,6 @@ func toGFMAnchor(str string) string {
 }
 
 func (pro *Propertie) ToFieldDoc(name string, required bool) FieldDoc {
-
 	defaultValue := ""
 	if pro.Default != nil {
 		defaultValue = fmt.Sprintf("%v", pro.Default)
