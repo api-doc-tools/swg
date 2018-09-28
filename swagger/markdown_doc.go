@@ -127,15 +127,15 @@ func (swg Swagger) operationToDoc(method, path string, op *Operation) string {
 	doc += "\n"
 	doc += fmt.Sprintf("### URL\n\n")
 	doc += fmt.Sprintf("%s %s\n", method, path)
-	if len(op.Produces) > 0 {
+	if len(op.Consumes) > 0 {
 		doc += "\n"
 		doc += fmt.Sprintf("### 请求方式\n\n")
-		doc += fmt.Sprintf("%s\n", stringstoString(op.Produces))
-	}
-	if len(op.Consumes) > 0 {
-		doc := "\n"
-		doc += fmt.Sprintf("### 响应方式\n\n")
 		doc += fmt.Sprintf(" %s\n", stringstoString(op.Consumes))
+	}
+	if len(op.Produces) > 0 {
+		doc += "\n"
+		doc += fmt.Sprintf("### 响应方式\n\n")
+		doc += fmt.Sprintf("%s\n", stringstoString(op.Produces))
 	}
 	doc += swg.parametersToDoc(op.Parameters)
 	doc += swg.responsesToDoc(op.Responses)
