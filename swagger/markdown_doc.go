@@ -64,19 +64,19 @@ func (swg Swagger) getApiSummary() string {
 		}
 		if item.Post != nil {
 			i++
-			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Post.Summary))
+			doc += fmt.Sprintf("%d. POST %s\n\t%s\n", i, path, toGFMAnchor(item.Post.Summary))
 		}
 		if item.Delete != nil {
 			i++
-			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Delete.Summary))
+			doc += fmt.Sprintf("%d. DELETE %s\n\t%s\n", i, path, toGFMAnchor(item.Delete.Summary))
 		}
 		if item.Patch != nil {
 			i++
-			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Patch.Summary))
+			doc += fmt.Sprintf("%d. PATCH %s\n\t%s\n", i, path, toGFMAnchor(item.Patch.Summary))
 		}
 		if item.Put != nil {
 			i++
-			doc += fmt.Sprintf("%d. GET %s\n\t%s\n", i, path, toGFMAnchor(item.Put.Summary))
+			doc += fmt.Sprintf("%d. PUT %s\n\t%s\n", i, path, toGFMAnchor(item.Put.Summary))
 		}
 	}
 	doc += "\n"
