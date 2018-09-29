@@ -8,7 +8,7 @@
 	[获取一本书的信息](#获取一本书的信息)
 2. GET /books
 	[列出所有的书](#列出所有的书)
-3. GET /books
+3. POST /books
 	[上传书的信息](#上传书的信息)
 
 # 服务基本信息
@@ -39,6 +39,10 @@
 
 GET /book/{bookUUID}
 
+### 响应方式
+
+ application/json,application/xml
+
 ### 参数列表
 
 | 参数名 |  IN   | 必填 | 类型 | 取值范围 | 默认值 | 取值例子 | 说明 |
@@ -64,6 +68,10 @@ GET /book/{bookUUID}
 
 GET /books
 
+### 响应方式
+
+ application/json,application/xml
+
 ### 参数列表
 
 | 参数名 |  IN   | 必填 | 类型 | 取值范围 | 默认值 | 取值例子 | 说明 |
@@ -88,16 +96,28 @@ GET /books
 
 POST /books
 
+### 请求方式
+
+ application/json,application/xml
+
+### 响应方式
+
+application/json,application/xml
+
 ### 参数列表
 
 | 参数名 |  IN   | 必填 | 类型 | 取值范围 | 默认值 | 取值例子 | 说明 |
 | ----- | ----- |---- | ---- | ----- | ------- | ----- | ------ |
 | userUUID | header | 是 | string | len<=8 |  |  | 用户uuid |
 | Token | header | 是 | string | len<=64 |  |  | 身份认证Token |
+| body | body | 是 | [Books](#books) |  |  |  |  |
 
+#### body说明
+
+正确结果
 ### Http状态码及响应结果信息
 
- - 200: [Books](#books)
+ - 200: 无
 
 正确结果
 

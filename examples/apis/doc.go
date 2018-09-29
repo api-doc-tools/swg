@@ -122,11 +122,15 @@ var AddBook = &swg.APIDocCommon{
 	Tags:                 []string{"book"},
 	Summary:              "上传书的信息",
 	Consumes:             []string{swg.Application_Json, swg.Application_Xml},
+	Produces:             []string{swg.Application_Json, swg.Application_Xml},
 	GlobalParameterNames: []string{UserUUID, Token},
+	Request: &swg.Request{
+		Description: "正确结果",
+		Model:       &Books{},
+	},
 	Responses: map[int]swg.Response{
 		200: swg.Response{
 			Description: "正确结果",
-			Model:       &Books{},
 		},
 		-1: swg.Response{
 			Description: "错误返回",
