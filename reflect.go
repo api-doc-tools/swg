@@ -632,7 +632,7 @@ func isOmitempty(field reflect.StructField) bool {
 func getStructFieldDescription(field reflect.StructField) string {
 	desc := field.Tag.Get("desc")
 	if isOmitempty(field) {
-		desc += " (为空则不输出)"
+		desc += " (omitempty)"
 	}
 	return desc
 }
